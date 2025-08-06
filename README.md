@@ -9,4 +9,35 @@ Following is an image of a hex block of data.  Easy for us humans, not so easy f
 
 <image>
 
+Forth Words
 
+The following Forth words were created to produce the original hex dump.
+
+endianswap - as the system is little endian, this allows the word to be converted to big endian byte order
+hex4       - output the 16 bit word on the stack as hex with leading zeros
+hexline    - generate a line including the memory address followed by 8 words
+hexblock   - display 8 hex lines
+
+For the graphics block code dump, only the endianswap word is needed.  The following new words were created
+
+font       - used to display the character set, used to test ouputing various characters
+gsync      - creates an easy to find sync pattern for the decoder
+gmap       - creates a legend of the characters used, not necessary
+gsp        - emits spaces to align the varous components on the screen
+gheader    - output a left sync block, the legend and the right sync block
+gword      - output a 16 bit word as block characters
+gline      - output a line of 32 encoded words as the line width is 64 characters
+gblock     - output 8 lines of encoded words
+gfoot      - output a left sync block, start address, end address, chksum and right sync block
+gpage      - outputs the header, code block and footer
+gstart     - sets the starting address and puts the forth into hex output mode
+
+The Forth code for these words is in block-code.fs
+
+Python Decoder
+
+The Python module Pillow was used for scanning the generated image.  First the image is loaded.  It is then scanned row by row to find the sync blocks.  The locations of the sync blocks are recorded.  Once the scan is complete, the minumum and maximum coordinates of the sync blocks are determines.  Thse are used to calculate the location of the block data and the size of each screen character.  With this information it is then fairly easy to recognize the various block characters.  Due to the high quality of the image, due to it being a screenshot, it is only necessary to get the value of a single pixel for each block within the character, preferably in the central region as the edges vary due to anti-aliasing.  The characters are made of six block in a 2x3, 2 wide by 3 high format.  Each of these six bits are then used to determine the value of the character and an array is used to determine the hex nibble the graphic block represents.  Once the block is scanned, the footer is used to read the start and end address of the block, in addition to a chksum to verify no errors occurred.
+
+I then tested the Forth encoder, took a screenshot and tested the Python decoder.  The data transfer appeared to be reliable.  As there were a number of the blocks I wanted to transfer, I decided to look into automating this process.  The following tools were used for the automation.
+
+Automation
