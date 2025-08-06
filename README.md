@@ -247,5 +247,5 @@ Note:  The data extracted from this page is just some data within the emulator r
 
 # License
 
-Copyright © Brian Sheldon, [License File](/LICENSE)
+Copyright © Brian Sheldon, [MIT license](/LICENSE)
 
