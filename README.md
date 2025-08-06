@@ -227,6 +227,21 @@ xdo.sh - used to automate the capture process
 
 snap.sh - not required, but convenient for any additional snapshots required
 
+## Links to the demo and source of the Forth system used
 
+The article describing this Forth system
 
+https://www.teamten.com/lawrence/projects/forth-interpreter/
+
+The source code of the Forth and the other utilites
+
+https://github.com/lkesteloot/trs80
+
+The online demo of this Forth interpreter
+
+https://www.my-trs-80.com/#!runFile=xHNZeLu3X6tLVA4FoEX3
+
+Note:  The source also include a number of utilies related to the TRS-80 and the Z80 processor.  It includes an assembler, which I assume is able to process the unique directives used in the Z80 source code of the Forth interperter.  So none of this was actually necessary, but I thought it would be an interesting quick project.  Although some of the directives used in the source were not typical, they definitely can be quite useful.  I particularly like the #local directive as it allows the reuse of labels withing the code, while only being seen within their local scope.
+
+Note:  The data extracted from this page is just some data within the emulator running in the browser.  All the data is readily available in other forms.
 
