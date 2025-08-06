@@ -11,6 +11,10 @@ Following is an image of a hex block of data.  Easy for us humans, not so easy f
 
 ![First of the original text based screenshots](/images/text.8000.png)
 
+Here is an image of a block code version of a hex dump.  Now this is what computers like to see.
+
+![First block code image, cropped from screenshot](/images/code.8000.png)
+
 Note: This is actually a cropped version of the image for easier display here.  The original screenshot includes the entire page, so the decoder must be able to find the image within the page.
 
 ## Forth Words
