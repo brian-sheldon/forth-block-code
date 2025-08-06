@@ -245,7 +245,7 @@ Note:  The source also include a number of utilies related to the TRS-80 and the
 
 Note:  The data extracted from this page is just some data within the emulator running in the browser.  All the data is readily available in other forms.
 
-License
+# License
 
-Copyright © Brian Sheldon, /LICENSE
+Copyright © Brian Sheldon, (/LICENSE)
 
