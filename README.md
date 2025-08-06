@@ -41,3 +41,15 @@ The Python module Pillow was used for scanning the generated image.  First the i
 I then tested the Forth encoder, took a screenshot and tested the Python decoder.  The data transfer appeared to be reliable.  As there were a number of the blocks I wanted to transfer, I decided to look into automating this process.  The following tools were used for the automation.
 
 Automation
+
+As this demo system has no way to save the Forth code I created, I found a tool to simulate typing in the code for these words.  The tool I used is "xdotool".  I installed it in Raspberry Pi Os (Bookworm) using the following command.
+
+sudo apt install xdotool
+
+I then found the tool, "gnome-screenshot", to do screenshots from the linux command line.  It is installed using this command.
+
+sudo apt install gnome-screenshot
+
+Then I created some bash scripts to do the automation.  The first on uses the xdotool to send the Forth code to the browser.  It is also able to automatically find the browser window using the title of the window.  I found it necessary to have it automatically put the window in focus before sending the code to the browser.  The firefox browser worked with no issues, but the window had to be left in focus until complete.  I was unable to get the chrome browser to work reliably.  It seemed unable to receive the ":" character.
+
+The next bash script, was used to automate the process of generating a graphic block with Forth, taking a screenshot and running the Python decoder.
