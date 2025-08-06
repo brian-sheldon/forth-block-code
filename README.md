@@ -13,38 +13,179 @@ Following is an image of a hex block of data.  Easy for us humans, not so easy f
 
 Note: This is actually a cropped version of the image for easier display here.  The original screenshot includes the entire page, so the decoder must be able to find the image within the page.
 
-##Forth Words
+## Forth Words
 
 The following Forth words were created to produce the original hex dump.
 
 endianswap - as the system is little endian, this allows the word to be converted to big endian byte order
+
+``` Forth
+: endianswap
+    dup 8>>
+    swap 8<<
+    + ;
+```
+
 hex4       - output the 16 bit word on the stack as hex with leading zeros
+
+``` Forth
+: hex4
+    dup $1000 < if $30 emit then
+    dup  $100 < if $30 emit then
+    dup   $10 < if $30 emit then
+    hex u. ;
+```
+
 hexline    - generate a line including the memory address followed by 8 words
+
+``` Forth
+: hexline
+    dup hex4 $20 emit $20 emit
+    8 0 do
+        dup @ endianswap hex4
+        $20 emit
+        2 +
+    loop
+    cr ;"
+```
+
 hexblock   - display 8 hex lines
+
+``` Forth
+: hexblock
+    8 0 do
+        hexline
+    loop ;
+```
 
 For the graphics block code dump, only the endianswap word is needed.  The following new words were created
 
 font       - used to display the character set, used to test ouputing various characters
+
+``` Forth
+: font
+    cls
+    192 0 do
+        i 32 < if
+            $20 emit
+        else
+            i emit
+        then
+    loop
+    cr ;
+```
+
 gsync      - creates an easy to find sync pattern for the decoder
+
+``` Forth
+: gsync
+    $bf emit
+    3 0 do
+        $20 emit
+        $bf emit
+    loop ;
+```
+
 gmap       - creates a legend of the characters used, not necessary
+
+``` Forth
+: gmap
+    16 0 do
+        i u.
+        i $81 + emit
+    loop ;
+```
+
 gsp        - emits spaces to align the varous components on the screen
+
+``` Forth
+: gsp
+    0 do
+        $20 emit
+    loop ;
+```
+
 gheader    - output a left sync block, the legend and the right sync block
+
+``` Forth
+: ghead
+    cls
+    gsync
+    9 gsp
+    gmap
+    9 gsp
+    gsync ;
+```
+
 gword      - output a 16 bit word as block characters
+
+``` Forth
+: gword
+    dup 8>> $f0 and $10 / $81 + emit
+    dup 8>> $0f and $81 + emit
+    dup $f0 and $10 / $81 + emit
+    $0f and $81 + emit ;
+```
+
 gline      - output a line of 32 encoded words as the line width is 64 characters
+
+``` Forth
+: gline
+    16 0 do
+        dup @ endianswap dup gword
+        rot + swap
+        2 +
+    loop ;
+```
+
 gblock     - output 8 lines of encoded words
+
+``` Forth
+: gblock
+    8 0 do
+        gline
+    loop ;
+```
+
 gfoot      - output a left sync block, start address, end address, chksum and right sync block
-gpage      - outputs the header, code block and footer
+
+``` Forth
+: gfoot
+    gsync 10 gsp
+    dup $100 - dup gword $20 emit hex4 $20 emit
+    dup 1 - dup gword $20 emit hex4 $20 emit
+    swap dup gword $20 emit hex4 $20 emit
+    10 gsp gsync ;
+```
+
+gbody      - outputs the header, code block and footer
+
+``` Forth
+: gbody
+    0 swap
+    ghead
+    gblock
+    gfoot cr ;
+```
+
 gstart     - sets the starting address and puts the forth into hex output mode
+
+``` Forth
+: gstart
+    hex
+    $8000
+    gbody ;
+```
 
 The Forth code for these words is in block-code.fs
 
-##Python Decoder
+## Python Decoder
 
 The Python module Pillow was used for scanning the generated image.  First the image is loaded.  It is then scanned row by row to find the sync blocks.  The locations of the sync blocks are recorded.  Once the scan is complete, the minumum and maximum coordinates of the sync blocks are determines.  Thse are used to calculate the location of the block data and the size of each screen character.  With this information it is then fairly easy to recognize the various block characters.  Due to the high quality of the image, due to it being a screenshot, it is only necessary to get the value of a single pixel for each block within the character, preferably in the central region as the edges vary due to anti-aliasing.  The characters are made of six block in a 2x3, 2 wide by 3 high format.  Each of these six bits are then used to determine the value of the character and an array is used to determine the hex nibble the graphic block represents.  Once the block is scanned, the footer is used to read the start and end address of the block, in addition to a chksum to verify no errors occurred.
 
 I then tested the Forth encoder, took a screenshot and tested the Python decoder.  The data transfer appeared to be reliable.  As there were a number of the blocks I wanted to transfer, I decided to look into automating this process.  The following tools were used for the automation.
 
-##Automation
+## Automation
 
 As this demo system has no way to save the Forth code I created, I found a tool to simulate typing in the code for these words.  The tool I used is "xdotool".  I installed it in Raspberry Pi Os (Bookworm) using the following command.
 
