@@ -191,6 +191,16 @@ The Python module Pillow was used for scanning the generated image.  First the i
 
 I then tested the Forth encoder, took a screenshot and tested the Python decoder.  The data transfer appeared to be reliable.  As there were a number of the blocks I wanted to transfer, I decided to look into automating this process.  The following tools were used for the automation.
 
+Files used for decoding the scanned image.
+
+capture.py - scans the image, determines the location of the block code, outputs the x, y, w, h of the block code to be used by the automation script to save having to repeat this step for each additional image.  It then decodes the individual characters, converts them to text and saves to a file.
+
+sample.output.txt - a sample of data from 4 scanned images
+
+capture.mod.py - used to convert the text output from capture.py to binary and save it
+
+crop.py - not required, but used to crop some of the images in this repository
+
 ## Automation
 
 As this demo system has no way to save the Forth code I created, I found a tool to simulate typing in the code for these words.  The tool I used is "xdotool".  I installed it in Raspberry Pi Os (Bookworm) using the following command.
@@ -208,6 +218,15 @@ sudo apt install gnome-screenshot
 Then I created some bash scripts to do the automation.  The first, "xdo.words.sh", on uses the xdotool to send the Forth code to the browser.  It is also able to automatically find the browser window using the title of the window.  I found it necessary to have it automatically put the window in focus before sending the code to the browser.  The firefox browser worked with no issues, but the window had to be left in focus until complete.  I was unable to get the chrome browser to work reliably.  It seemed unable to receive the ":" character.
 
 The next bash script, "xdo.sh", was used to automate the process of generating a graphic block with Forth, taking a screenshot and running the Python decoder.
+
+Following are the bash scripts used for automation.
+
+xdo.words.sh - used one time to load the Forth code to the emulator
+
+xdo.sh - used to automate the capture process
+
+snap.sh - not required, but convenient for any additional snapshots required
+
 
 
 
