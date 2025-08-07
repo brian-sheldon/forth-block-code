@@ -1,4 +1,4 @@
-# forth-block-code
+# forth-scan-code
 A method to transmit data via images using a simple block code on a retro system
 
 After reading a blog post for a small Forth interpreter project, I checked out the link to a demo and the source ocde on a github repository.  The forth was a fairly easy to follower minimal Forth written in Z80 assembler.  After a quick look at the source code, I realized the code using some atypical directives and there was even at least one non-existent Z80 instruction.  I was immediately curious to see the generated binary code.  So I wrote a few simple forth words to view the code in hex on the online demo.  Working between the browser and the source code winodows was a bit tedious, so I decided to try using AI to quickly convert an image of the screen to text.  This mostly worked, but the AI was only about 70% accurate.  It would have probably worked better if I used screenshots rather than taking pictures.
