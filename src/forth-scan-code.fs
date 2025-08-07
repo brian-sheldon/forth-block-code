@@ -1,5 +1,5 @@
 \
-\ forth-block-code.fs words
+\ forth-scan-code.fs words
 \
 \   by Brian Sheldon
 \
