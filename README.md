@@ -183,7 +183,7 @@ gstart     - sets the starting address and puts the forth into hex output mode
     gbody ;
 ```
 
-The Forth code for these words is in block-code.fs
+The Forth code for these words is in forth-scan-code.fs.
 
 ## Python Decoder
 
